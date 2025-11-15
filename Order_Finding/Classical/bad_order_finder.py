@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 """
 This is the simplest (and presumably least efficient) algorithm
@@ -8,7 +8,7 @@ of the integers modulo N for any N.
 
 def bad_order_finder(number: int, modulus: int):
 
-    if math.gcd(number, modulus) !=1:
+    if np.gcd(number, modulus) !=1:
         return None
     
     exponent = 1
