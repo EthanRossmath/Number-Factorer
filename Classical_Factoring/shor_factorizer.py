@@ -1,9 +1,9 @@
 import gmpy2
-from .classical_shor_auxillaries.is_power import kroot
-from .classical_shor_auxillaries.refine import consolidate_pairs
-from .classical_shor_auxillaries.splitter import splitter
+from .shor_aux.is_power import kroot
+from .shor_aux.refine import consolidate_pairs
+from .shor_aux.splitter import splitter
 
-def full_factorizer(n, order_finder):
+def shor_factorizer(n, order_finder):
 
     prime_list = []
     factor_list = []

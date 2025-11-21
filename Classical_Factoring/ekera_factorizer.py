@@ -1,12 +1,12 @@
 import gmpy2
 import random
-from .one_shot_auxillaries.factor_list_helpers import add_factor, power_refine, factorization_complete
-from .one_shot_auxillaries.prime_below_cutoff import primes_below_cutoff
+from .ekera_aux.factor_list_helpers import add_factor, power_refine, factorization_complete
+from .ekera_aux.prime_below_cutoff import primes_below_cutoff
 
 
 
 
-def one_shot_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_rounds: int = 40):
+def ekera_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_rounds: int = 40):
     """
     Factors number with one call to an order finding algorithm. An implementation
     of the algorithm found in "On completely factoring any integer efficiently in 
