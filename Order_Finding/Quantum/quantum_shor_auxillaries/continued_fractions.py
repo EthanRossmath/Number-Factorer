@@ -1,4 +1,4 @@
-import numpy as np
+import gmpy2
 
 def unbound_convergents(number, modulus):
     floaty = number
@@ -9,7 +9,7 @@ def unbound_convergents(number, modulus):
 
     convergents = []
     while True:
-        int_part = np.floor(floaty)
+        int_part = gmpy2.floor(floaty)
 
         old_num = num 
         old_denom = denom
@@ -43,7 +43,7 @@ def unbound_convergents(number, modulus):
             break
             
     
-    return num, denom
+    return int(num), int(denom)
 
 def get_denominator(binary_string, modulus):
     n = len(binary_string)

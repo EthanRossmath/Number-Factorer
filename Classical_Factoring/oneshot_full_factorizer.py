@@ -1,16 +1,12 @@
-import math
-from Order_Finding.Classical.bad_order_finder import bad_order_finder
-from one_shot_auxillaries.adding_factors import add_factor
-from one_shot_auxillaries.random_invertible import random_invertible
-from one_shot_auxillaries.prime_below_cutoff import primes_below_cutoff
-from one_shot_auxillaries.largest_exponent import largest_exponent
-from one_shot_auxillaries.power_refine import power_refine
-from one_shot_auxillaries.is_complete_factor import factorization_complete
+import gmpy2
+import random
+from .one_shot_auxillaries.factor_list_helpers import add_factor, power_refine, factorization_complete
+from .one_shot_auxillaries.prime_below_cutoff import primes_below_cutoff
 
 
 
 
-def one_shot_factorizer(number: int, bit_cutoff: int = 2, factoring_rounds: int = 40):
+def one_shot_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_rounds: int = 40):
     """
     Factors number with one call to an order finding algorithm. An implementation
     of the algorithm found in "On completely factoring any integer efficiently in 
@@ -20,10 +16,14 @@ def one_shot_factorizer(number: int, bit_cutoff: int = 2, factoring_rounds: int 
     factor_list = [(number, 1)]
 
     #1. Randomly choose an invertible element of {0, ..., number - 1}
-    g = random_invertible(number)
+
+    g = random.randint(2, number - 1)
+
+    while gmpy2.gcd(g, number) != 1:
+        g = random.randint(2, number - 1)
 
     #2. Call the order finding algorithm (in this case my very inefficient classical algorithm)
-    r = bad_order_finder(g, number)
+    r = order_finder(g, number)
 
     #3. Compute the cut-off for finding primes
     m = bit_cutoff * (number.bit_length())
@@ -33,7 +33,14 @@ def one_shot_factorizer(number: int, bit_cutoff: int = 2, factoring_rounds: int 
     prime_list = primes_below_cutoff(m)
 
     for q in prime_list:
-        factor = q ** largest_exponent(q, m)
+        exponent = 0
+        x = 1
+
+        while x < m:
+            x = x * q
+            exponent += 1
+
+        factor = q ** (exponent - 1)
 
         r = r * factor
     
@@ -48,7 +55,10 @@ def one_shot_factorizer(number: int, bit_cutoff: int = 2, factoring_rounds: int 
     for _ in range(1, factoring_rounds + 1):
 
         # compute potential source of factors
-        x = random_invertible(number)
+        x = random.randint(2, number - 1)
+
+        while gmpy2.gcd(g, number) != 1:
+            x = random.randint(2, number - 1)
 
         # raise to maximal odd power
         x = pow(x, r, number)
@@ -59,7 +69,7 @@ def one_shot_factorizer(number: int, bit_cutoff: int = 2, factoring_rounds: int 
         for i in range(even_exponent + 1):
 
             # potential factor
-            d = math.gcd(x - 1, number)
+            d = gmpy2.gcd(x - 1, number)
 
             # add to list if non-trivial, return reduced list
             if d > 1:

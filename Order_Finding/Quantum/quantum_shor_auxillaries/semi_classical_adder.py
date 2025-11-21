@@ -48,10 +48,10 @@ def Iphiadd_gate(summand: int, nqbits: int):
 
     return phiadd(summand, nqbits).inverse().to_gate(label=f'Iphiadd({summand})')
 
-def cphiadd_gate(summand: int, nqbits: int):
+def cphiadd_gate(summand: int, nqbits: int, nctrlqbits: int):
 
-    return phiadd(summand, nqbits).control(1).to_gate(label=f'phiadd({summand})')
+    return phiadd(summand, nqbits).control(nctrlqbits).to_gate(label=f'phiadd({summand})')
 
-def cIphiadd_gate(summand: int, nqbits: int):
+def cIphiadd_gate(summand: int, nqbits: int, nctrlqbits: int):
 
-    return phiadd(summand, nqbits).control(1).inverse().to_gate(label=f'Iphiadd({summand})')
+    return phiadd(summand, nqbits).control(nctrlqbits).inverse().to_gate(label=f'Iphiadd({summand})')

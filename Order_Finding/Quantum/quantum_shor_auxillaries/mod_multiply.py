@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit
-from quantum_shor_auxillaries.QFT import QFT_gate, IQFT_gate
-from quantum_shor_auxillaries.semi_classical_modular_adder import phiaddmod_gate
+from .QFT import QFT_gate, IQFT_gate
+from .semi_classical_modular_adder import phiaddmod_gate
 
 def cmult(multiplier, modulus, nbits):
 

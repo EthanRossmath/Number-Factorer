@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit
-from quantum_shor_auxillaries.QFT import QFT_gate, IQFT_gate
-from quantum_shor_auxillaries.semi_classical_adder import Iphiadd_gate, cphiadd_gate, cIphiadd_gate
+from .QFT import QFT_gate, IQFT_gate
+from .semi_classical_adder import Iphiadd_gate, cphiadd_gate, cIphiadd_gate
 
 def phiaddmod(summand: int, modulus: int, nqbits: int):
     """
@@ -54,4 +54,4 @@ def phiaddmod(summand: int, modulus: int, nqbits: int):
 
 def phiaddmod_gate(summand, modulus, nqbits):
 
-    phiaddmod(summand, modulus, nqbits).to_gate(label=f'phiaddmod({summand}, {modulus})')
+    return phiaddmod(summand, modulus, nqbits).to_gate(label=f'phiaddmod({summand}, {modulus})')

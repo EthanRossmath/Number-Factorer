@@ -1,11 +1,11 @@
-import numpy as np
+import gmpy2
 
 def find_order(invertible: int, modulus: int) -> int:
         """
         Finds the order of an invertible element in (Z/modulus)^* using Baby Steps, Giant Steps
         algorithm due to Shanks.
         """
-        b = np.ceil(np.sqrt(modulus - 1))
+        b = gmpy2.ceil(gmpy2.sqrt(modulus - 1))
 
         look_up_dict = {1:invertible}
         baby_power = invertible
