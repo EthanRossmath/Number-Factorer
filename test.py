@@ -10,5 +10,5 @@ from number_factorer.Factor_Number import (
 
 nf = Number_Factorer(ShorFactorization(), ShorOrder())
 
-print(nf.factor(72))
+print(nf.factor(45))
 
