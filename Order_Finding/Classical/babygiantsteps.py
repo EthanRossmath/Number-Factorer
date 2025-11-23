@@ -1,6 +1,6 @@
 import gmpy2
 
-def find_order(invertible: int, modulus: int) -> int:
+def baby_giant_order(invertible: int, modulus: int) -> int:
         """
         Finds the order of an invertible element in (Z/modulus)^* using Baby Steps, Giant Steps
         algorithm due to Shanks.

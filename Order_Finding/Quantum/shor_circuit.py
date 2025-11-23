@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit
-from .quantum_shor_aux.mod_multiply import shorU_gate
-from .quantum_shor_aux.QFT import IQFT_gate
+from .quantum_aux.mod_multiply import shorU_gate
+from .quantum_aux.QFT import IQFT_gate
 
 def shor_circuit(multiplier, modulus, nbits):
 

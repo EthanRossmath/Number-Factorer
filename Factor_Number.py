@@ -4,6 +4,19 @@ import math
 import random
 import gmpy2
 
+#Classical processing for factorization
+from .Classical_Factoring.ekera_factorizer import ekera_factorizer
+from .Classical_Factoring.shor_factorizer import shor_factorizer
+
+# Classical and quantum ordering finding methods
+from .Order_Finding.Classical.babygiantsteps import baby_giant_order
+from .Order_Finding.Classical.bad_order_finder import bad_order_finder
+from .Order_Finding.Quantum.beauregard_circuit import beauregard_circuit
+from .Order_Finding.Quantum.shor_circuit import shor_circuit
+from .Order_Finding.Quantum.quantum_order_finder import quantum_order_finder
+
+
+
 
 ################################################
 ########### ORDER FINDING METHODS ##############
