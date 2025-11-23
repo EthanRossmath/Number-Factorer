@@ -58,3 +58,50 @@ def get_denominator(binary_string, modulus):
 
     
     return ratio[1]
+
+def cont_frac(number: float, error: float, bound: float) -> list[int]:
+    """
+    Given a floating point number, computes pair of integers [num, denom]
+    where |number - num / denom| < bound.
+    """
+
+    num_prev = int(gmpy2.floor(number))
+
+    if (number - num_prev) < max(bound, error):
+        return [num_prev, 1]
+    
+    denom_prev = 1
+
+    conv = int(gmpy2.floor(1 / (number - num_prev)))
+
+    num = 1 + num_prev * conv
+    denom = conv
+
+    distance = abs(number - num / denom)
+
+    if distance < bound:
+        return [num, denom]
+    
+    diff = (1 / (number - num_prev)) - conv 
+
+    if diff < error:
+        return [num, denom]
+    
+    while (distance >= bound) and (diff >= error):
+        recip = 1 / diff
+        conv = int(gmpy2.floor(recip))
+
+        diff = recip - conv 
+
+        numpp = num
+        denompp = denom 
+
+        num = conv * num + num_prev 
+        denom = conv * denom + denom_prev
+
+        num_prev = numpp
+        denom_prev = denompp
+
+        distance = abs(number - num / denom)
+    
+    return [num, denom]

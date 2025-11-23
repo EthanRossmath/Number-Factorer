@@ -4,7 +4,7 @@ import numpy as np
 def QFT(nqbits):
     """
     Computes the Quantum Fourier Transform on nqbits number of 
-    qubits making use of using Draper's decomposition from (2002?)
+    qubits making use of using Draper's decomposition from (2002)
     """
 
     angle = np.pi

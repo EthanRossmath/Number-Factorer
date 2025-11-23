@@ -4,6 +4,11 @@ from .semi_classical_adder import Iphiadd_gate, cphiadd_gate, cIphiadd_gate
 
 def phiaddmod(summand: int, modulus: int, nqbits: int):
     """
+    Implements Beauregard's modular adder (2003). 
+
+    Input: qubit |a>, 0 <= a <= 2 ** (nqbits - 3) - 1
+    Output: qubit |(a + summand) % modulus >
+    
     If summand is an n-bit integer, choose nqbits = n + 4.
     nqbits > 3
     """
@@ -12,11 +17,17 @@ def phiaddmod(summand: int, modulus: int, nqbits: int):
         return ValueError('Not enough qubits. nqbits must be at least 4')
 
     # Precomputing lists of qubits
+
     number_of_integer_qubits = nqbits - 3
+
+    # all the qubits used to store the integers
     integer_qubits = list(range(2, nqbits - 1))
+
+    # two control qubits for addition
     ccqubits = [0, 1]
     ccqubits.extend(integer_qubits)
 
+    # overflow control qubit (used for checking if modulus - (a + b) < 0)
     cqubits = [nqbits - 1]
     cqubits.extend(integer_qubits)
 
