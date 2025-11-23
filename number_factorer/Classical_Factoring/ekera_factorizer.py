@@ -1,7 +1,7 @@
 import gmpy2
 import random
-from .ekera_aux.factor_list_helpers import add_factor, power_refine, factorization_complete
-from .ekera_aux.prime_below_cutoff import primes_below_cutoff
+from number_factorer.Classical_Factoring.ekera_aux.factor_list_helpers import add_factor, power_refine, factorization_complete
+from number_factorer.Classical_Factoring.ekera_aux.prime_below_cutoff import primes_below_cutoff
 
 
 
@@ -23,7 +23,7 @@ def ekera_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_r
         g = random.randint(2, number - 1)
 
     #2. Call the order finding algorithm (in this case my very inefficient classical algorithm)
-    r = order_finder(g, number)
+    r = order_finder.find_order(g, number)
 
     #3. Compute the cut-off for finding primes
     m = bit_cutoff * (number.bit_length())
@@ -80,7 +80,7 @@ def ekera_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_r
             
             # halt if full factorization is complete
             if factorization_complete(factor_list):
-                return factor_list
+                return [(int(factor[0]), factor[1]) for factor in factor_list]
             
             else:
                 x = pow(x, 2, number)
@@ -89,4 +89,4 @@ def ekera_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_r
                 break
 
     #7. Return factor list
-    return factor_list
+    return [(int(factor[0]), factor[1]) for factor in factor_list]

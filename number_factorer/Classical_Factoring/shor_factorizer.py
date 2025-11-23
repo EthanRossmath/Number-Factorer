@@ -1,17 +1,17 @@
 import gmpy2
-from .shor_aux.is_power import kroot
-from .shor_aux.refine import consolidate_pairs
-from .shor_aux.splitter import splitter
+from number_factorer.Classical_Factoring.shor_aux.is_power import kroot
+from number_factorer.Classical_Factoring.shor_aux.refine import consolidate_pairs
+from number_factorer.Classical_Factoring.shor_aux.splitter import splitter
 
-def shor_factorizer(n, order_finder):
+def shor_factorizer(number: int, order_finder):
 
     prime_list = []
     factor_list = []
 
-    if (n % 2) == 0:
+    if (number % 2) == 0:
 
         k = 0
-        m = n 
+        m = number 
 
         while (m % 2) == 0:
             k += 1
@@ -21,7 +21,7 @@ def shor_factorizer(n, order_finder):
         factor_list.append((m, 1))
     
     else:
-        factor_list.append((n, 1))
+        factor_list.append((number, 1))
     
     while len(factor_list) > 0:
 
@@ -46,4 +46,6 @@ def shor_factorizer(n, order_finder):
 
         factor_list = consolidate_pairs(new_list)
 
-    return consolidate_pairs(prime_list)
+    final_list = consolidate_pairs(prime_list)
+    return [(int(factor[0]), factor[1]) for factor in final_list]
+

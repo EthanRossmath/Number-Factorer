@@ -1,5 +1,5 @@
 import gmpy2
-from Classical_Factoring.shor_aux.is_power import kroot
+from number_factorer.Classical_Factoring.shor_aux.is_power import kroot
 
 def refine(factors: list):
     L = factors

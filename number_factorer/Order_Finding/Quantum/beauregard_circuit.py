@@ -1,7 +1,7 @@
 from qiskit import QuantumCircuit
 import numpy as np
 
-from .quantum_aux.mod_multiply import shorU_gate
+from number_factorer.Order_Finding.Quantum.quantum_aux.mod_multiply import shorU_gate
 
 def beauregard_circuit(multiplier, modulus, nbits):
 

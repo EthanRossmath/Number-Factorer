@@ -1,7 +1,7 @@
 import numpy as np
 from qiskit_aer import AerSimulator
 from qiskit import transpile
-from .quantum_aux.continued_fractions import get_denominator
+from number_factorer.Order_Finding.Quantum.quantum_aux.continued_fractions import get_denominator
 
 def quantum_order_finder(number, modulus, quantum_circuit):
 
