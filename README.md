@@ -71,6 +71,49 @@ Ekera's 2021 variant of Shor's classical processing that only calls on the order
 
 ## 2. How to Use This Repository
 
+### Downloading the library
+In the root directory, run the following in your terminal
+```
+pip install -e .
+
+```
+After that, number_factorer should be downloaded to your machine. 
+
+### Using the library
+
+In a python file, run
+```
+from number_factorer import (
+    Number_Factorer,
+    IncrementOrder,
+    BabyGiantOrder,
+    ShorFactorization,
+    EkeraFactorization,
+    ShorOrder,
+    BeauregardOrder
+)
+```
+To get all options. To factor a number, say 91, you need to do the following:
+1. choose an order finding algorithm: IncrementOrder, BabyGiantOrder, ShorOrder, or BeauregardOrder
+2. choose a classical processing algorithm: ShorFactorization or EkeraFactorization
+3. Instantiate a full factorization algorithm by running
+```
+nf = Number_Factorer(Factor(), Order())
+```
+for example,
+```
+nf = Number_Factorer(ShorFactorization(), BabyGiantOrder())
+```
+4. Factor your number using the .factor() method
+```
+nf.factor(91)
+```
+will return 
+```
+[(7, 1), (13, 1)]
+```
+indicating (correctly) that $91=7\times 13$.
+
 
 
 ## 3. Description of algorithms.
