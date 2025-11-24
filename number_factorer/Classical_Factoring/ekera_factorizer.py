@@ -50,6 +50,8 @@ def ekera_factorizer(number: int, order_finder, bit_cutoff: int = 2, factoring_r
         r = r // 2
         even_exponent += 1
     
+    
+    
     #6. Find the factors 
 
     for _ in range(1, factoring_rounds + 1):

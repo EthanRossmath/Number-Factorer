@@ -4,11 +4,10 @@
 
 1. [Introduction](#1-introduction)
 2. [How to use this repository](#2-how-to-use-this-repository)
-3. [Overview of contents](#3-overview-of-contents)
-4. [Description of each folder](#4-description-of-each-folder)
-5. [Sources](#5-sources)
+3. [Description of algorithms](#3-description-of-algorithms)
+4. [Sources](#4-sources)
 
-## 1. INTRODUCTION
+## 1. Introduction
 
 This is a Python library implemented by Ethan Ross for factoring integers using using variants of the number factoring algorithm presented by Shor in his seminal 1997 paper *Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer.* The essential idea is that factoring an integer N will involve two algorithms
 1. An order finding algorithm $\mathrm{Ord}$ that takes as input two integers $N,a\in \mathbb{Z}$ such that
@@ -29,222 +28,153 @@ Provided that an order finding algorithm $\mathrm{Ord}$ has been provided, the c
 which implies $a^{r/2}-1\text{ mod }N$ divides $N$. Let $d=\mathrm{gcd}(a^{r/2}-1,N)$
 4. Return $d$ and $N/d$
 
-There are two features worth noting about the above algorithm. First, it is not a full factorization algorithm, but rather a crucial inductive step in a full factorization. See number_factorer/Classical_Factoring/shor_factorization.py for a full implementation. Checking if an integer is even, a power of a prime, and the other processing (like computing modular powers and greatest common divisors) can be implemented in polynomial time on a classical computer. Thus, this leads us to the second thing of note in this algorithm: the usage of an order finding algorithm $\mathrm{Ord}$ in step 2. As far as classical computing goes, the best order finding algorithms (e.g. prime sieves) run in subexponential time and seemingly cannot be improved to polynomial time (provided $P\neq NP$). Thus, factorization is inherently inefficient on a classical computer.
+There are two features worth noting about the above algorithm. First, it is not a full factorization algorithm, but rather a crucial inductive step in a full factorization. See [shor_factorizer.py](/number_factorer/Classical_Factoring/shor_factorizer.py) for a full implementation. Checking if an integer is even, a power of a prime, and the other processing (like computing modular powers and greatest common divisors) can be implemented in polynomial time on a classical computer. Thus, this leads us to the second thing of note in this algorithm: the usage of an order finding algorithm $\mathrm{Ord}$ in step 2. As far as classical computing goes, the best order finding algorithms (e.g. prime sieves) run in subexponential time and seemingly cannot be improved to polynomial time (provided $P\neq NP$). Thus, factorization is inherently inefficient on a classical computer.
 
 Of course, the point of this repository is that Shor showed order finding can be done efficiently, *provided you have access to a sufficiently large quantum computer.* In particular, order finding can be implemented in $\mathcal{O}(n^3)$ time on a quantum computer where $n$ is the bit length of the integer $N$ we are factoring. This is a remarkable speed up and shows the promise of quantum computers (to destroy our public key cryptography, for instance).
 
 
 In the future, I would like to implement some version of Shor's algorithm on actual hardware, but that would require implementing Quantum Error Correction (QEC) in some capacity and would require an in depth study of the actual hardware used by, say, IBM.
 
+As of November 2025, these are the following options available.
+
+### Order Finding
+#### Classical
+
+[bad_order_finder.py](/number_factorer/Order_Finding/Classical/bad_order_finder.py)
+
+Incrementally computes order of $a$ modulo $N$ in $\mathcal{O}(n^2 2^n)$ computations, where $n$ is the bit length of $N$.
+
+[babygiantsteps.py](/number_factorer/Order_Finding/Classical/babygiantsteps.py)
+
+Shanks' 1969 order finding algorithm. Computes the order of $a$ modulo $N$ with $\mathcal{O}(n2^{n/2})$ computations.
+
+#### Quantum
+[shor_circuit.py](/number_factorer/Order_Finding/Quantum/shor_circuit.py)
+
+A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package. Computes the order of $a$ modulo $N$ using $4n+2$ qubits and $\mathcal{O}(n^3)$ simulated quantum operations.
+
+[beauregard.py](/number_factorer/Order_Finding/Quantum/beauregard_circuit.py)
+
+A simulation of Beauregard's 2003 variant of Shor's circuit that uses only one control qubit. Implemented using Qiskit and the AerSimulator package. Computes the order of $a$ modulo $N$ using $4n+2$ qubits and $\mathcal{O}(n^3)$ simulated quantum operations.
+
+
+### Classical Factoring
+[shor_factorizer.py](/number_factorer/Classical_Factoring/shor_factorizer.py)
+
+A full implementation of Shor's original 1997 classical factoring algorithm. Produces the full prime factorization of $N$ in $\mathcal{O}(n^3)$ computations modulo the order finding algorithm.
+
+
+[ekera_factorizer.py](/number_factorer/Classical_Factoring/ekera_factorizer.py)
+
+Ekera's 2021 variant of Shor's classical processing that only calls on the order finding algorithm once. Also computes the full prime factorization in $\mathcal{O}(n^3)$ operations modulo the order finding algorithm.
+
+
 ## 2. How to Use This Repository
 
-## 3. Overview of Contents
 
-This project consists of two folders, Order_Finding and Classical_Factoring. An in depth description will be given in the next section. Here, I will briefly describe each folder and its contents. Both are completely independent of one another to keep in the spirit of this project.
 
-```
-NUMBER-FACTORER
-├── Classical_Factoring
-│   ├── classical_shor_auxillaries
-│   │   ├── is_power.py
-│   │   ├── power_of_two.py
-│   │   ├── refine.py
-│   │   └── splitter.py
-│   ├── one_shot_auxillaries
-│   │   ├── adding_factors.py
-│   │   ├── is_complete_factor.py
-│   │   ├── largest_exponent.py
-│   │   ├── power_refine.py
-│   │   ├── prime_below_cutoff.py
-│   │   └── random_invertible.py
-│   ├── oneshot_full_factorizer.py
-│   └── shor_full_factorizer.py
-├── Order_Finding
-│   ├── Classical
-│   │   ├── babygiantsteps.py
-│   │   ├── bad_order_finder.py
-│   │   └── random_order_finder.py
-│   └── Quantum
-│       ├── one_control.py
-│       └── quantum_shor_auxillaries
-│           ├── continued_fractions.py
-│           ├── mod_multiply.py
-│           ├── QFT.py
-│           ├── semi_classical_adder.py
-│           └── semi_classical_modular_adder.py
+## 3. Description of algorithms.
 
-```
-Classical_Factoring contains all algorithms and helper functions which implement a $\mathrm{Factor}$ algorithm that completely factors an integer using an order finding method as a primitive.  Order_Finding contains all classical and (simulated) quantum algorithms that implement an order finding method. 
+### Order Finding
+#### Classical
 
-## 4. Description Of Each Folder
+[bad_order_finder.py](/number_factorer/Order_Finding/Classical/bad_order_finder.py)
 
-### 1. Order_Finding
-This implements various Classical and Quantum order finding methods organized into the Classical and Quantum subfolders.
+ The most inefficient algorithm possible. Given a positive integers $N\geq 3$ and $2\leq a\leq N-1$ with $\mathrm{gcd}(a,N)=1$, this algorithm compute the multiplicative order of $a$ modulo $N$ as follows.
+1. Compute $x=a^2\text{ mod }N$ and set $i=2$.
+2. If $x=1$, return $i$. Otherwise, increment $i=i+1$.
+3. Compute $x=x\cdot a\text{ mod }N$. Return to Step 2.
 
-#### 1.1 Classical
+Computes the order in $\mathcal{O}(n^2 2^n)$ computations where $n$ is the bit length of $N$.
 
-This contains all the current implementations of classical order finding methods which compute the multiplicative order of an integer $a\in \mathbb{Z}$ modulo $N$ for some $N\geq 3$ provided $\mathrm{gcd}(a,N)=1$.
+Naive improvements like randomly sampling exponents and using fast modular exponentation are not quite the improvement because if a random exponent $i$ with $2\leq i\leq N-1$ satisfies $a^i=1\text{ mod }N$, then this only guarantees $i$ is a multiple of the order and thus much more processing is required.
 
-    bad_order_finder.py
 
-This is the most inefficient algorithm one could implement. It goes as follows.
-        
-(A) Set $i=2$ and $x = a^2 \text{ mod }N$
-         
-(B) Check if $x=1$. If so, let $\mathrm{Ord}(a,N)=i$. 
-          
-(C) If not, set $x = x\cdot a \text{ mod }N$ and increment $i$ by $1$. Return to step (B)
+[babygiantsteps.py](/number_factorer/Order_Finding/Classical/babygiantsteps.py)
 
-This almost guaranteed to take an exponential number of calculuations and hence is extremely inefficient for large $N$.
+Shanks' 1969 order finding algorithm. A significant improvement over the previous algorithm. Given a positive integers $N\geq 3$ and $2\leq a\leq N-1$ with $\mathrm{gcd}(a,N)=1$, this algorithm computes the multiplicative order of $a$ modulo $N$ as follows.
+1. Set $b=\lceil \sqrt{N-1}\rceil$.
+2. (Baby Steps) Compute list $\{a,\dots,a^b\}$, all modulo $N$. If $a^i=1\text{ mod }N$ for some $1\leq i\leq b$, return the minimal such $i$.
+3. (Giant Steps) Compute $a^{ib}\text{ mod }N$, starting at $i=2$. Continue to increment until there exists $1\leq j\leq b$ so that $a^{ib}=a^j$. Return $ib-j$.
 
-    babygiantsteps.py
+Computes the order in $\mathcal{O}(n^2 2^{n/2})$ operations where $n$ is the bit length of $N$.
 
+#### Quantum
+[shor_circuit.py](/number_factorer/Order_Finding/Quantum/shor_circuit.py)
 
-This is a version of the Baby Steps, Giant Steps ordering finding algorithm due to Shanks in 1967.  This algorithm has two parts. 
+A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package.
 
-1. Baby Steps.
+PICTURE
 
-Set $b = \lceil \sqrt{N-1} \rceil$ and compute $\{a, a^2, \dots, a^b \}$ all modulo $N$. If $a^i \equiv 1\text{ mod }N$ at any step along the way, set $\mathrm{Ord}(a, N)=i$ (this so far looks like the previous algorithm).
+Given positive integers $N\geq 3$ and $2\leq a\leq N-1$, computes the order of $a$ modulo $N$ using $4n+4$ qubits and $\mathcal{O}(n^3)$ quantum computations, where $n$ is the bit length of $N$. 
 
-2. Giant Steps.
 
-Compute the list $\{a^{2b}, a^{3b}, a^{4b}, \cdots\}$. If for any $i$ it ever occurs that $a^{ib}\equiv a^j\text{ mod }N$ for some $1\leq j\leq b$, then set $\mathrm{Ord}(a,N) = ib-j$.
 
-#### 1.2 Quantum
+[beauregard.py](/number_factorer/Order_Finding/Quantum/beauregard_circuit.py)
 
-Contains all simulated Quantum circuits in qiskit that implement some version of Shor's original order finding algorithm.
+A simulation of Beauregard's 2003 variant of Shor's circuit that uses only one control qubit. Implemented using Qiskit and the AerSimulator package.
 
-    original_shor.py
+PICTURE
 
+Given positive integers $N\geq 3$ and $2\leq a\leq N-2$, computes the order of $a$ modulo $N$ using $2n+3$ qubits and $\mathcal{O}(n^3)$ quantum operations.
 
+### Classical Factoring
+[shor_factorizer.py](/number_factorer/Classical_Factoring/shor_factorizer.py)
 
-Description
+A full implementation of Shor's original 1997 classical factoring algorithm. Given a positive integer $N\geq 3$ and an order finding algorithm $\mathrm{Ord}$, produces the full prime factorization $N=p_1^{n_1}\cdots p_k^{n_k}$, where $p_1,\dots,p_k$ are all distinct primes and $k_1,\dots,k_n\geq 1$ are the multiplicites. 
 
-    one_control
+1. Initialize two empty lists $\mathrm{factors}=\{\}$ and $\mathrm{primes}=\{\}$. 
+2. If $N$ is even, factor $N=2^k m$ where $\mathrm{gcd}(2,m)=1$. Update $\mathrm{factors}=\{(m, 1)\}$ and $\mathrm{primes}=\{(2,1)\}$. Otherwise, update $\mathrm{factors}=\{(N, 1)\}$
+3. While $|\mathrm{factors}|>0$, do the following. 
 
-[SCREEN SHOT]
+    3.1. Let $(A, k)\in \mathrm{factors}$.
 
-Description
+    3.2. Classically check if $A$ is prime (using say Miller-Rabin). If so, remove $(A,k)$ from $\mathrm{factors}$, add it to $\mathrm{primes}$, and return to 3.1. If not, continue.
 
-##### 1.2.1 quantum_shor_auxillaries
+    3.3. Classically check if $A=r^\ell$ for some $r\geq 2$ and $\ell\geq 2$ (using say Bernstein's 1998 algorithm). If so, update $(A,k)$ to $(r, \ell k)$ and return to 3.1. If not, continue.
 
-Here I will briefly describe each of the helper functions and routines found in this folder.
+    3.4. Run the following algorithm.
 
-    QFT.py
+    3.4.1. Randomly choose $2\leq a\leq A-1$  with $\mathrm{gcd}(a,A)=1$.
 
-[SCREEN SHOT]
+    3.4.2. Use the ordering finding algorithm $\mathrm{Ord}$ to compute the order $r=|a|$ of $a$ modulo $A$. If $r$ is odd, return to 3.4.1.
 
-Description
+    3.4.3. Compute $d=\mathrm{gcd}(a^{r/2}+1,A)$. 
 
-    semi_classical_adder.py
+    3.4.4. Remove $(A,k)$ from $\mathrm{factors}$ and replace it with $(d,k)$ and $(A/d,k)$. 
 
-[SCREEN SHOT]
+    3.5. Consolidate any repeated factors in $\mathrm{factors}$. Return to 3.1.
 
-Description
+4. Return $\mathrm{primes}$
 
+This algorithm wittles down the factors of $N$ until they are prime then adds them to the list of prime factors. Modulo the order finding algorithm, this will compute the full factorization in $\mathcal{O}(n^3)$ where $n$ is the bit length of $N$.
 
-    semi_classical_modular_adder.py
+[ekera_factorizer.py](/number_factorer/Classical_Factoring/ekera_factorizer.py)
 
-[SCREEN SHOT]
+Ekera's 2021 variant of Shor's classical processing that only calls on the order finding algorithm once. Given an integer $N\geq 3$ and an order finding algorithm $\mathrm{Ord}$, and constant integers $c\geq 1$, $R\geq 1$, compute the prime factorization $N=p_1^{n_1}\cdots p_k^{n_k}$ as follows.
 
-Description
+1. Initialize a list of factors $\mathrm{factor}=\{(N,1)\}$.
+2. Randomly choose integer $2\leq a\leq N-2$ with $\mathrm{gcd}(a,N)=1$.
+3. Compute $r=\mathrm{Ord}(a,N)$
+4. Let $m=cn$, where $n$ is the bit length of $N$.
+5. Compute a list $P$ of primes $p$ with bit length less than $m$ (using say Miller-Rabin).
+6. Let $q = r\prod_{p \in P}p^{\eta_p}$, where $\eta_p\geq 0$ is the largest integer so that $p^{\eta_p}<m$
+7. Write $r=2^ks$, where $s$ is odd. 
+8. Run the following algorithm $R$ times.
 
+    8.1. Randomly choose $2\leq x\leq N-2$ with $\mathrm{gcd}(x,N)=1$.
 
-    mod_multiply.py
+    8.2. Compute $y=x^s\text{ mod }N$ and set $i=0$. If $y=1$, return to 8.1. 
 
-[SCREEN SHOT]
+    8.3. Compute $d=\mathrm{gcd}(y-1,N)$. If $d>1$, add $(d,1)$ to the list $\mathrm{factors}$. Reduce the list so that all factors are co-prime. Otherwise, continue.
 
-Description
+    8.4. Set $y=y^2\text{ mod }N$ and increment $i=i+1$. 
 
+    8.5. If $i=k$, halt. Otherwise, return to $8.3$. 
 
-    continued_fractions.py
+9. Return $\mathrm{factors}$.
 
-[SCREEN SHOT]
-
-Description
-
-### 2. Classical_Factoring
-
-This directory contains all algorithms $\mathrm{Factor}$ which take as input an integer $N\geq 3$ and an order finding algorithm $\mathrm{Ord}$ and outputs the full  prime factorization of $N$. All algorithms make use of the ```gmpy``` Python library for highly optimized computing. In the future, I would like to hop in the C++ coding and implement this myself.
-
-    shor_full_factorizer
-
-[SCREEN SHOT]
-
-Descrption
-
-    one_shot_factorizer
-
-[SCREEN SHOT]
-
-Descrption
-
-#### 2.1 classical_shor_auxillaries
-
-    is_power.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    power_of_two.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    refine.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    splitter.py
-
-[SCREEN SHOT]
-
-Descrption
-
-#### 2.2 one_shot_auxillaries
-
-    adding_factors.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    is_complete_factor.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    largest_exponent.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    power_refine.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    prime_below_cutoff.py
-
-[SCREEN SHOT]
-
-Descrption
-
-    random_invertible.py
-
-[SCREEN SHOT]
-
-Descrption
-
-
-## 5. Sources
+## 4. Sources
 
 In putting this library together, a variety of technical sources were consulted. Here are the main ones.
 

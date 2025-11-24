@@ -8,7 +8,7 @@ from number_factorer.Factor_Number import (
     BeauregardOrder
 )
 
-nf = Number_Factorer(ShorFactorization(), ShorOrder())
+nf = Number_Factorer(EkeraFactorization(), ShorOrder())
 
-print(nf.factor(45))
+print(nf.factor(44))
 
