@@ -51,7 +51,7 @@ Shanks' 1969 order finding algorithm. Computes the order of $a$ modulo $N$ with 
 #### Quantum
 [shor_circuit.py](/number_factorer/Order_Finding/Quantum/shor_circuit.py)
 
-A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package. Computes the order of $a$ modulo $N$ using $4n+2$ qubits and $\mathcal{O}(n^3)$ simulated quantum operations.
+A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package. Computes the order of $a$ modulo $N$ using $4n+1$ qubits and $\mathcal{O}(n^3)$ simulated quantum operations.
 
 [beauregard.py](/number_factorer/Order_Finding/Quantum/beauregard_circuit.py)
 
@@ -145,9 +145,13 @@ Computes the order in $\mathcal{O}(n^2 2^{n/2})$ operations where $n$ is the bit
 #### Quantum
 [shor_circuit.py](/number_factorer/Order_Finding/Quantum/shor_circuit.py)
 
-A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package.
+A simulation of the original order finding quantum circuit as presented by Shor in 1997. Implemented using Qiskit and the AerSimulator package. 
 
-PICTURE
+![Alt text](images/shor.png)
+
+Where $U(a)$ is the Beauregard (2003) implementation of the modular multiplier gate
+
+![Alt text](images/U.png)
 
 Given positive integers $N\geq 3$ and $2\leq a\leq N-1$, computes the order of $a$ modulo $N$ using $4n+4$ qubits and $\mathcal{O}(n^3)$ quantum computations, where $n$ is the bit length of $N$. 
 
@@ -157,7 +161,7 @@ Given positive integers $N\geq 3$ and $2\leq a\leq N-1$, computes the order of $
 
 A simulation of Beauregard's 2003 variant of Shor's circuit that uses only one control qubit. Implemented using Qiskit and the AerSimulator package.
 
-PICTURE
+![Alt text](images/beauregard.png)
 
 Given positive integers $N\geq 3$ and $2\leq a\leq N-2$, computes the order of $a$ modulo $N$ using $2n+3$ qubits and $\mathcal{O}(n^3)$ quantum operations.
 
