@@ -9,7 +9,7 @@ def quantum_order_finder(number, modulus, quantum_circuit):
         print(f'{number} is not invertible modulo {modulus}')
         return 0
 
-    nbits = modulus.bit_length() + 1
+    nbits = modulus.bit_length() 
 
     qc = quantum_circuit(number, modulus, nbits)
 

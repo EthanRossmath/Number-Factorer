@@ -27,6 +27,21 @@ class OrderFindingAlgorithm(ABC):
            base with given modulus."""
         pass
 
+    def is_quantum(self) -> bool:
+        """
+        Returns True if order finding method is based on a quantum circuit,
+        returns False otherwise.
+        """
+        return False
+    
+    def get_circuit(self, invertible, modulus):
+        """
+        For order finding methods that use quantum methods,
+        returns a Qiskit quantum circuit of the order finding algorithm
+        for invertible modulo modulus if quantum. Returns None otherwise
+        """
+        return None
+
 #############
 # Classical #
 #############
@@ -58,11 +73,27 @@ class ShorOrder(OrderFindingAlgorithm):
     def find_order(self, invertible: int, modulus: int) -> int:
         
         return quantum_order_finder(invertible, modulus, shor_circuit)
+    
+    def is_quantum(self):
+        return True
+    
+    def get_circuit(self, invertible, modulus):
+        nbits = modulus.bit_length()
+
+        return shor_circuit(invertible, modulus, nbits)
 
 class BeauregardOrder(OrderFindingAlgorithm):
     def find_order(self, invertible: int, modulus: int) -> int:
         
         return quantum_order_finder(invertible, modulus, beauregard_circuit)
+    
+    def is_quantum(self):
+        return True
+    
+    def get_circuit(self, invertible, modulus):
+        nbits = modulus.bit_length()
+
+        return beauregard_circuit(invertible, modulus, nbits)
 
 
 ################################################

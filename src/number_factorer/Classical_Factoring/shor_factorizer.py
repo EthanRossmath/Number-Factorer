@@ -30,7 +30,8 @@ def shor_factorizer(number: int, order_finder):
         prime_list.append((2, k))
 
         # move the rest to the factor list
-        factor_list.append((m, 1))
+        if m > 1:
+            factor_list.append((m, 1))
     
     else:
         factor_list.append((number, 1))
