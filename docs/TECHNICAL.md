@@ -128,13 +128,17 @@ satisfies $U(a)|\psi_j\rangle=e^{2\pi i j/r}|\psi_j\rangle$. The circuit given b
 ![Applying the phase estimation circuit to an eignvector of U(a)](/images/shoreigen.png)
 
 Then the measured bits $c_0,\dots,c_{m-1}$ satisfy
+
 $$
 \sum_{k=0}^{m-1}c_k 2^{m-k}\approx \frac{j}{r}
 $$
+
 where we were trying to find $r$ all along! Of course that means we would need to be able to prepare one of these eigenvectors, which is infeasible. However, it turns out that
+
 $$
 |1\rangle=|10\cdots0\rangle=\frac{1}{\sqrt{r}}\sum_{j=0}^{r-1}|\psi_j\rangle
 $$
+
 This is why in the diagram for Shor's algorithm given above, I initialized the second register to be $|1\rangle\otimes |0^{n-1}\rangle$. The result of running this circuit is that we will uniformly at random obtain an approximation for some $\displaystyle\frac{j}{r}$ for some $0\leq j\leq r-1$. With good probability, $j$ will be co-prime with $r$ allowing us to easily find $r$.
 
 
@@ -142,7 +146,7 @@ This is why in the diagram for Shor's algorithm given above, I initialized the s
 
 A simulation of Beauregard's 2003 variant of Shor's circuit that uses only one control qubit. Implemented using Qiskit and the AerSimulator package.
 
-![Alt text](images/beauregard.png)
+![Alt text](/images/beauregard.png)
 
 Given positive integers $N\geq 3$ and $2\leq a\leq N-2$, computes the order of $a$ modulo $N$ using $2n+3$ qubits and $\mathcal{O}(n^3)$ quantum operations. This works almost identically to Shor's original algorithm, except there is only one control qubit which is reset back to $0$ after every run of $U(a^{2^j})$. The inverse QFT is also applied by means of phase gates $P(\phi_j)$, where for each $j$,
 $$
