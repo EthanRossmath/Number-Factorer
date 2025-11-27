@@ -24,7 +24,7 @@ nf.factor(92) # Returns [(7, 1), (13, 1)]
 
 ## Algorithms
 
-See [TECHNICAL.md](TECHNICAL.md) for in-depth discussions of each of the algorithms listed below.
+See [TECHNICAL.md](/docs/TECHNICAL.md) for in-depth discussions of each of the algorithms listed below.
 
 ### Classical Order Finding
 - **IncrementOrder**: $\mathcal{O}(n^2\cdot 2^n)$
@@ -40,7 +40,7 @@ See [TECHNICAL.md](TECHNICAL.md) for in-depth discussions of each of the algorit
 
 ## References
 
-See [REFERENCES.md](REFERENCES.md) for citations to the technical sources for this project.
+See [REFERENCES.md](docs/REFERENCES.md) for citations to the technical sources for this project.
     
 
 
