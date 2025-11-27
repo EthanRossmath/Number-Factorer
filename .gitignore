@@ -1,2 +1,15 @@
- __pycache__/
- *.egg-info/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.envs/
+
+# Packaging
+*.egg-info/
+dist/
+build/
