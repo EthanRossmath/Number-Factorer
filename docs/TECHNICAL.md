@@ -67,11 +67,11 @@ A simulation of the original order finding quantum circuit as presented by Shor 
 
 The full circuit is below.
 
-![Alt text](images/shor.png)
+![The full circuit for Shor's algorithm](/images/shor.png)
 
 Two gates need to be implemented to carry out the circuit above, namely the Quantum Fourier Transform $\mathrm{QFT}$ and the modular multiplication gate $U(a)$. The Quantum Fourier Transform, which can be found in [QFT.py](/number_factorer/Order_Finding/Quantum/quantum_aux/QFT.py), is the version given by Draper (2001) with the following circuit.
 
-![Alt text](images/QFT.png)
+![Draper's version of the QFT](/images/QFT.png)
 
 The gates $P(\pi/2^{i})$ are controlled phase gates, where for any angle $\theta$
 $$
@@ -94,7 +94,7 @@ where we're viewing $x=\displaystyle\sum_{k=0}^{n-1}x_k 2^k$.
 
  The controlled modular multiplication gate, which can be found in [mod_multiply.py](number_factorer/Order_Finding/Quantum/quantum_aux/mod_multiply.py), is the version given by Beauregard (2003)
 
- ![Alt text](images/U.png)
+ ![Beauregard's implementation of modular multiplication](/images/U.png)
 
 
 This is a variant of Beauregard's 2003  implementation. In detail, this gate takes the following inputs
@@ -125,7 +125,7 @@ $$
 $$
 satisfies $U(a)|\psi_j\rangle=e^{2\pi i j/r}|\psi_j\rangle$. The circuit given by Shor (modulo the input bits) is the circuit for a family of quantum algorithms called "Phase Estimation" which in this case if we ran the following circuit
 
-![Alt text](images/shoreigen.png)
+![Applying the phase estimation circuit to an eignvector of U(a)](/images/shoreigen.png)
 
 Then the measured bits $c_0,\dots,c_{m-1}$ satisfy
 $$
