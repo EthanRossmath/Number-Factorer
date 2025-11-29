@@ -7,8 +7,8 @@ from number_factorer.Classical_Factoring.shor_aux.refine import consolidate_pair
 
 from number_factorer.Order_Finding.Classical.babygiantsteps import baby_giant_order
 
-from number_factorer.Order_Finding.Quantum.shor_circuit import shor_circuit
-from number_factorer.Order_Finding.Quantum.beauregard_circuit import beauregard_circuit
+from number_factorer.Order_Finding.Quantum.quantum_aux.QFT import QFT
+from number_factorer.Order_Finding.Quantum.quantum_aux.mod_multiply import shorU
 
 
 
@@ -100,15 +100,13 @@ def shor_estimate_time(number, quantum_order_name):
                     new_list.extend([(subfactors[0], a[1]), (subfactors[1], a[1])])
 
                 extra_time = 0
-                if quantum_order_name == 'shor' and algo_ran:
-                    qc = shor_circuit(inv, a[0], nbits)
-
-                    extra_time = (500e-09) * (qc.depth()) * (qc.num_qubits)
+                if quantum_order_name == 'ShorOrder' and algo_ran:
+                    depth = (2 * nbits) * shorU(inv, a[0], nbits).decompose().decompose().decompose().depth() + QFT(2 * nbits).depth()
+                    extra_time = (500e-09 * (4 * nbits + 1) * depth) + (1e-09) * (nbits ** 3)
                 
-                if quantum_order_name == 'beau' and algo_ran:
-                    qc = beauregard_circuit(inv, a[0], nbits)
-
-                    extra_time = (500e-09) * (qc.depth()) * (qc.num_qubits)
+                if quantum_order_name == 'BeauregardOrder' and algo_ran:
+                    depth = (2 * nbits) * shorU(inv, a[0], nbits).decompose().decompose().decompose().depth() + 4 * (nbits +  (nbits ** 2))
+                    extra_time = (500e-09 * (2 * nbits + 2) * depth) + (1e-09) * (nbits ** 3)
                 
                 gain_time.append(extra_time)
 

@@ -2,13 +2,10 @@ import random
 import time
 import gmpy2
 
-from number_factorer.Classical_Factoring.shor_aux.is_power import kroot
-from number_factorer.Classical_Factoring.shor_aux.refine import consolidate_pairs
-
 from number_factorer.Order_Finding.Classical.babygiantsteps import baby_giant_order
 
-from number_factorer.Order_Finding.Quantum.shor_circuit import shor_circuit
-from number_factorer.Order_Finding.Quantum.beauregard_circuit import beauregard_circuit
+from number_factorer.Order_Finding.Quantum.quantum_aux.QFT import QFT
+from number_factorer.Order_Finding.Quantum.quantum_aux.mod_multiply import shorU
 
 from number_factorer.Classical_Factoring.ekera_factorizer import primes_below_cutoff
 from number_factorer.Classical_Factoring.ekera_aux.factor_list_helpers import add_factor, power_refine, factorization_complete
@@ -36,13 +33,13 @@ def ekera_estimate_time(number: int, order_algo, bit_cutoff: int = 2, factoring_
     nbits = number.bit_length()
 
     extra_time = 0
-    if order_algo == 'shor':
-        qc = shor_circuit(g, number, nbits)
-        extra_time = 500e-09 * (qc.num_qubits) * (qc.depth())
+    if order_algo == 'ShorOrder':
+        depth = (2 * nbits) * shorU(g, number, nbits).decompose().decompose().decompose().depth() + QFT(2 * nbits).depth()
+        extra_time = (500e-09 * (4 * nbits + 1) * depth) + (1e-09) * (nbits ** 3)
     
-    if order_algo == 'beau':
-        qc = beauregard_circuit(g, number, nbits)
-        extra_time = 500e-09 * (qc.num_qubits) * (qc.depth())
+    if order_algo == 'BeauregardOrder':
+        depth = (2 * nbits) * shorU(g, number, nbits).decompose().decompose().decompose().depth() + 4 * (nbits +  (nbits ** 2))
+        extra_time = (500e-09 * (2 * nbits + 2) * depth) + (1e-09) * (nbits ** 3)
 
     l2 = time.perf_counter()
 

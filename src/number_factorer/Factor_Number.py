@@ -108,6 +108,9 @@ class FactorizationAlgorithm(ABC):
     def factor(self, number: int, order_finder: OrderFindingAlgorithm) -> List[Tuple[int, int]]:
         pass
 
+    def quantum_time_estimate(self, number: int, order_finder: OrderFindingAlgorithm) -> float:
+        pass
+
 #############
 #### Shor ###
 #############
@@ -173,6 +176,22 @@ class Number_Factorer:
 
     def factor(self, number: int) -> List[Tuple[int, int]]:
         return self.factor_algo.factor(number, self.order_algo)
+    
+    def quantum_time_estimate(self, number: int) -> float:
+
+        if self.order_algo.is_quantum():
+            algo_name = self.order_algo.__class__.__name__
+
+            return self.factor_algo.quantum_time_estimate(number, algo_name)
+        
+        else:
+            import time 
+            start_time = time.perf_counter()
+            self.factor_algo.factor(number, self.order_algo)
+            end_time = time.perf_counter()
+
+            return end_time - start_time
+
 
         
 
