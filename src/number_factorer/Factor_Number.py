@@ -14,7 +14,7 @@ from number_factorer.Order_Finding.Quantum.quantum_order_finder import quantum_o
 
 # Benchmarking methods
 from number_factorer.Bench_Marking.shor_factor_estimate import shor_estimate_time
-from number_factorer.Bench_Marking.ekera_factor_estimate import ekera_estimate
+from number_factorer.Bench_Marking.ekera_factor_estimate import ekera_estimate_time
 
 
 
@@ -159,7 +159,7 @@ class EkeraFactorization(FactorizationAlgorithm):
         'shor' or 'beau'
         """
 
-        return ekera_estimate(number, quantum_order_name)
+        return ekera_estimate_time(number, quantum_order_name)
 
 
 ################################################

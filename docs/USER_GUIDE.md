@@ -207,12 +207,41 @@ One way to improve this run time issue is to use the other classical processing 
 
 ### Comparing Quantum and Classical Order Finding
 
-The following shows that oth the the Quantum order finding algorithms are vastly slower than either of the classical algorithms. 
+As one might expect, the simulated quantum circuits are vastly slower than the classical order finding algorithms. However, we crucially would like to get an estimate on how well our circuits would run on a sufficiently powerful and fault-tolerant quantum computer. To that end, I have implemented the ```.quantum_time_estimate()``` method for each of the factorization algorithms. To run this, pick one of the classical processing algorithms ShorFactorizer() or EkeraFactorizer() and choose one of the quantum order finding algorithms ShorOrder() or BeauregardOrder(). To estimate (in seconds) how long it would take to factor an integer $N$ run the code below.
+
+```python
+from number_factorer import ShorFactorization, EkeraFactorization
+
+N = 115 # number to factor
+
+# estimate time to factor N using ShorOrder() and ShorFactorization()
+ShorFactorization().quantum_time_estimate(115, 'shor') 
+# returns approx 0.00026224982889000437
+
+
+# estimate time to factor N using BeauregardOrder() and ShorFactorization()
+ShorFactorization().quantum_time_estimate(115, 'beau') 
+# returns approx 6.3318293541669846e-06
+
+
+# estimate time to factor N using ShorOrder() and EkeraFactorization()
+EkeraFactorization().quantum_time_estimate(115, 'shor') 
+# returns approx 0.00027508298830687997
+
+
+# estimate time to factor N using BeauregardOrder() and EkeraFactorization()
+EkeraFactorization().quantum_time_estimate(115, 'beau') 
+# returns approx 0.0013107499431073664
+```
+
+For an anecdotal reference, using ShorOrder() with ShorFactorization() to factor $115$ took 2 hours on my machine. And so, the benefit is now we can compare the hypothetical performance of our quantum algorithms on numbers much larger than what would be feasible to simulate. 
+
+The code below compares the performance of the quantum factorization algorithms and their classical counterparts for large numbers.
+
+
 
 [PICTURE]
 
-However, keep in mind that we are using classical simulations of quantum circuits, not actual quantum circuits. And so this is to be expected. If we use another metric where we instead count the number of quantum gates used in the order finding computation and assume each gate takes AMOUNT OF TIME TO RUN, then the quantum algorithms actually vastly out perform their classical counterparts.
 
-[PICTURE]
 
 
