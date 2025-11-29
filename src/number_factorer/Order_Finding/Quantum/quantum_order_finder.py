@@ -3,7 +3,7 @@ from qiskit_aer import AerSimulator
 from qiskit import transpile
 from number_factorer.Order_Finding.Quantum.quantum_aux.continued_fractions import get_denominator
 
-def quantum_order_finder(number, modulus, quantum_circuit):
+def quantum_order_finder(number, modulus, quantum_circuit, algo_name):
 
     if np.gcd(number, modulus) != 1:
         print(f'{number} is not invertible modulo {modulus}')
@@ -21,6 +21,6 @@ def quantum_order_finder(number, modulus, quantum_circuit):
     while pow(number, order, modulus) != 1:
         result = list(aer_simulator.run(transpiled_circuit, shots=1).result().get_counts())[0]
             
-        order = get_denominator(result, modulus)
+        order = get_denominator(result, modulus, algo_name)
     
     return order

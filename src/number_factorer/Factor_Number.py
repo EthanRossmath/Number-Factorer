@@ -12,6 +12,9 @@ from number_factorer.Order_Finding.Quantum.beauregard_circuit import beauregard_
 from number_factorer.Order_Finding.Quantum.shor_circuit import shor_circuit
 from number_factorer.Order_Finding.Quantum.quantum_order_finder import quantum_order_finder
 
+# Benchmarking methods
+from number_factorer.Bench_Marking.shor_factor_estimate import shor_estimate_time
+from number_factorer.Bench_Marking.ekera_factor_estimate import ekera_estimate
 
 
 
@@ -72,7 +75,7 @@ class BabyGiantOrder(OrderFindingAlgorithm):
 class ShorOrder(OrderFindingAlgorithm):
     def find_order(self, invertible: int, modulus: int) -> int:
         
-        return quantum_order_finder(invertible, modulus, shor_circuit)
+        return quantum_order_finder(invertible, modulus, shor_circuit, 'shor')
     
     def is_quantum(self):
         return True
@@ -85,7 +88,7 @@ class ShorOrder(OrderFindingAlgorithm):
 class BeauregardOrder(OrderFindingAlgorithm):
     def find_order(self, invertible: int, modulus: int) -> int:
         
-        return quantum_order_finder(invertible, modulus, beauregard_circuit)
+        return quantum_order_finder(invertible, modulus, beauregard_circuit, 'beau')
     
     def is_quantum(self):
         return True
@@ -120,6 +123,16 @@ class ShorFactorization(FactorizationAlgorithm):
         """
         return shor_factorizer(number, order_finder)
     
+    def quantum_time_estimate(self, number: int, quantum_order_name):
+        """
+        Estimates the length of time required by a quantum computer to run quantum circuit
+        (provided circuit had proper quantum error correction.) quantum_order_name can be either
+        'shor' or 'beau'
+        """
+
+        return shor_estimate_time(number, quantum_order_name)
+
+    
 
 #############
 ### Ekera ###
@@ -138,6 +151,15 @@ class EkeraFactorization(FactorizationAlgorithm):
         """
         
         return ekera_factorizer(number, order_finder, bit_cutoff, factoring_rounds)
+    
+    def quantum_time_estimate(self, number: int, quantum_order_name):
+        """
+        Estimates the length of time required by a quantum computer to run quantum circuit
+        (provided circuit had proper quantum error correction.) quantum_order_name can be either
+        'shor' or 'beau'
+        """
+
+        return ekera_estimate(number, quantum_order_name)
 
 
 ################################################

@@ -45,11 +45,16 @@ def unbound_convergents(number, modulus):
     
     return int(num), int(denom)
 
-def get_denominator(binary_string, modulus):
+def get_denominator(binary_string, modulus, algo_name: str):
     n = len(binary_string)
     dec = 0
 
-    power_of_two = 2
+    if algo_name == 'shor':
+        power_of_two = 2
+    
+    if algo_name == 'beau':
+        power_of_two = 4
+        
     for i in range(n):
         dec += int(binary_string[i]) / power_of_two
         power_of_two *= 2
