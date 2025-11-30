@@ -22,25 +22,14 @@ nf = Number_Factorer(ShorFactorization(), BabyGiantOrder())
 nf.factor(92) # Returns [(7, 1), (13, 1)]
 ```
 
-## Algorithms
+## Further Documentation
 
-See [TECHNICAL.md](/docs/TECHNICAL.md) for in-depth discussions of each of the algorithms listed below.
+- See [USER_GUIDE.md](/docs/USER_GUIDE.md) for tutorials on using number factorer and its various functionalities.
 
-### Classical Order Finding
-- **IncrementOrder**: $\mathcal{O}(n^2\cdot 2^n)$
-- **BabyGiantOrder**: $\mathcal{O}(n\cdot 2^{n/2})$
+- See [TECHNICAL.md](/docs/TECHNICAL.md) for technical discussions on each of the algorithms and their implementations.
 
-### (Simulated) Quantum Order Finding
-- **ShorOrder**: $4n+1$ qubits, $\mathcal{O}(n^3)$ quantum computations
-- **BeauregardOrder**: $2n+2$ qubits, $\mathcal{O}(n^3)$ quantum computations
+- See [REFERENCES.md](/docs/REFERENCES.md) for references to the technical literature relied upon for this library.
 
-### Classical Factoring
-- **ShorFactorization**: Full prime factorization using order finding, repeatedly splits subfactors until full prime factorization is obtained.
-- **EkeraFactorization**: Single order-finding call variant.
-
-## References
-
-See [REFERENCES.md](docs/REFERENCES.md) for citations to the technical sources for this project.
     
 
 
