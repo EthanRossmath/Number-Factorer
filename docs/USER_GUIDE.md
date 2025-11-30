@@ -207,41 +207,108 @@ One way to improve this run time issue is to use the other classical processing 
 
 ### Comparing Quantum and Classical Order Finding
 
-As one might expect, the simulated quantum circuits are vastly slower than the classical order finding algorithms. However, we crucially would like to get an estimate on how well our circuits would run on a sufficiently powerful and fault-tolerant quantum computer. To that end, I have implemented the ```.quantum_time_estimate()``` method for each of the factorization algorithms. To run this, pick one of the classical processing algorithms ShorFactorizer() or EkeraFactorizer() and choose one of the quantum order finding algorithms ShorOrder() or BeauregardOrder(). To estimate (in seconds) how long it would take to factor an integer $N$ run the code below.
+As one might expect, the simulated quantum circuits are vastly slower than the classical order finding algorithms. However, we crucially would like to get an estimate on how well our circuits would run on a sufficiently powerful and fault-tolerant quantum computer. To that end, I have implemented the ```.quantum_time_estimate()``` method for each of the factorization algorithms. To run this, choose your classical processing algorithm and order finding algorithm and initialize your number factorer. Once you're done this, apply the method to get an estimate.
 
 ```python
-from number_factorer import ShorFactorization, EkeraFactorization
+from number_factorer import Number_Factor, ShorFactorization, BeauregardOrder
 
-N = 115 # number to factor
-
-# estimate time to factor N using ShorOrder() and ShorFactorization()
-ShorFactorization().quantum_time_estimate(115, 'shor') 
-# returns approx 0.00026224982889000437
-
-
-# estimate time to factor N using BeauregardOrder() and ShorFactorization()
-ShorFactorization().quantum_time_estimate(115, 'beau') 
-# returns approx 6.3318293541669846e-06
-
-
-# estimate time to factor N using ShorOrder() and EkeraFactorization()
-EkeraFactorization().quantum_time_estimate(115, 'shor') 
-# returns approx 0.00027508298830687997
-
-
-# estimate time to factor N using BeauregardOrder() and EkeraFactorization()
-EkeraFactorization().quantum_time_estimate(115, 'beau') 
-# returns approx 0.0013107499431073664
+print(nf.quantum_time_estimate(115)) #returns approx 0.004416499985381961
 ```
 
-For an anecdotal reference, using ShorOrder() with ShorFactorization() to factor $115$ took 2 hours on my machine. And so, the benefit is now we can compare the hypothetical performance of our quantum algorithms on numbers much larger than what would be feasible to simulate. 
+This method can be applied to any number factoring algorithm, even the ones with classical order finding methods. In the case where a classical order finding method was used, this method will just factor the number as usual and return the time required. In the case where a quantum algorithm is used, the number of qubits and elementary gates needed are computed each time the order finding method is called which is then used to provide an estimate of the time a quantum computer would need to compute the order. The actual order finding is done via BabyGiantOrder.
+
+
+For an anecdotal reference, using ShorOrder() with ShorFactorization() to factor $115$ using the simulated quantum circuit took 2 hours on my machine. And so, the benefit is now we can compare the hypothetical performance of our quantum algorithms on numbers much larger than what would be feasible to simulate. 
 
 The code below compares the performance of the quantum factorization algorithms and their classical counterparts for large numbers.
 
+```python
+import gmpy2
+import random
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from number_factorer import (
+    EkeraFactorization,
+    ShorFactorization,
+    IncrementOrder,
+    BabyGiantOrder,
+    ShorOrder,
+    BeauregardOrder,
+    Number_Factorer
+)
+
+test_int = []
+
+for bit_length in range(4, 33):
+
+    N = random.randint(2 ** (bit_length - 1), (2 ** bit_length) - 1)
+
+    while gmpy2.is_prime(N) or gmpy2.is_power(N) or ((N % 2) == 0):
+        N = random.randint(2 ** (bit_length - 1), (2 ** bit_length) - 1)
+    
+    test_int.append(N)
 
 
-[PICTURE]
+def shorten(algo_name: str):
+    if algo_name[0:5] == 'ShorF':
+        return 'ShorF'
+    
+    elif algo_name[0:5] == 'ShorO':
+        return 'Shor'
+    
+    elif algo_name[0] == 'E':
+        return 'Ekera'
+    
+    elif algo_name[0:2] == 'Be':
+        return 'Beau'
+    
+    elif algo_name[0:2] == 'Ba':
+        return 'BG'
+    
+    else:
+        return 'Inc'
+    
 
+proccessors = [ShorFactorization(), EkeraFactorization()]
+
+order_finders = [IncrementOrder(), BabyGiantOrder(), ShorOrder(), BeauregardOrder()]
+
+times = []
+
+for proc_algo in proccessors:
+
+    for ord_algo in order_finders:
+
+        nf = Number_Factorer(proc_algo, ord_algo)
+
+        algo_name = shorten(f"{proc_algo.__class__.__name__}") + shorten(f"{ord_algo.__class__.__name__}")
+
+        for bits, number in enumerate(test_int):
+            time_estimate = nf.quantum_time_estimate(number)
+            outcome = [algo_name, time_estimate, np.log10(time_estimate), bits + 4]
+            times.append(outcome)
+
+df = pd.DataFrame(times, columns = ["Algorithm", "time_estimate", "log_time_estimate", "bit_length"])
+
+for algo in df["Algorithm"].unique():
+    subset = df[df["Algorithm"] == algo]
+    plt.scatter(subset["bit_length"], subset["log_time_estimate"], label = algo, alpha = 0.7)
+
+plt.xlabel("Bit Length")
+plt.ylabel("log(Factoring Time (seconds))")
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.show()
+```
+
+![Alt text](/images/all_comp.png)
+
+This is a little messy given that there are 8 distinct algorithms at play. However, we see a general trend which is that the quantum algorithms all cluster together in a logarithmic fashion, indicating polynomial growth in time, whereas the purely classical algorithms cluster together in a more steeply growing fashion. It's a little messy, so if we just choose the best performing of the quantum and classical algorithms, we get the following picture.
+
+![Alt text](/images/best_perform.png)
+
+This shows that although the classical algorithms are projected to outperform quantum algorithms in factoring integers up to 32 bits, the steepness of the classical growth indicates beyond 32 bits quantum algorithms should be the better performing algorithms. A more powerful machine than my own would be necessary to actually check how this relationship holds beyond 32 bits.
 
 
 
